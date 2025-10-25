@@ -34,23 +34,31 @@ export default defineContentScript({
       }, THROTTLE_TIME);
       updateCounter();
 
-      const observer = new MutationObserver(updateCounter);
-      observer.observe(
-        document.querySelector(".notion-frame .notion-scroller") as Node, // FIXME
-        {
+      // MutationObserver を変数として保持
+      let observer = new MutationObserver(updateCounter);
+
+      // 監視を設定する関数
+      const setupObserver = () => {
+        const target = document.querySelector(".notion-frame .notion-scroller");
+        if (!target) return;
+
+        observer.disconnect(); // 既存の監視を解除
+        observer.observe(target as Node, {
           childList: true,
           subtree: true,
           characterData: true,
-        }
-      );
+        });
+      };
+      setupObserver();
 
       chrome.runtime.onMessage.addListener(
-        async ({ type }: { type: string }) => {
+        throttle(async ({ type }: { type: string }) => {
           if (type === "CHANGE_PAGE") {
             await waitFor(".notion-frame .notion-scroller .layout-content");
             updateCounter();
+            setupObserver();
           }
-        }
+        }, THROTTLE_TIME)
       );
     })();
   },
