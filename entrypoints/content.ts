@@ -28,15 +28,13 @@ export default defineContentScript({
       Object.assign(counterDiv.style, COUNTER_STYLES);
       document.body.appendChild(counterDiv);
 
-      const updateCounter = () => {
+      const updateCounter = throttle(() => {
         const counts = calculateNotionCharacterCounts();
         counterDiv.textContent = `文字数: ${counts.bodyWithoutSpaces}`;
-      };
+      }, THROTTLE_TIME);
       updateCounter();
 
-      const observer = new MutationObserver(
-        throttle(updateCounter, THROTTLE_TIME)
-      );
+      const observer = new MutationObserver(updateCounter);
       observer.observe(
         document.querySelector(".notion-frame .notion-scroller") as Node, // FIXME
         {
@@ -48,7 +46,6 @@ export default defineContentScript({
 
       chrome.runtime.onMessage.addListener(
         async ({ type }: { type: string }) => {
-          console.log("received", type);
           if (type === "CHANGE_PAGE") {
             await waitFor(".notion-frame .notion-scroller .layout-content");
             updateCounter();
