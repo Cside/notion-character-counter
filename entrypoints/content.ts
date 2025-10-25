@@ -3,16 +3,14 @@ import { throttle } from "es-toolkit";
 const THROTTLE_TIME = 150;
 
 const COUNTER_STYLES = {
-  position: "fixed",
-  bottom: "20px",
-  right: "20px",
+  // position: "fixed",
+  // bottom: "20px",
+  // right: "20px",
   padding: "8px 12px",
-  backgroundColor: "rgba(255, 255, 255, 0.8)",
-  borderRadius: "6px",
   fontSize: "14px",
-  fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
-  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
-  zIndex: "9999",
+  // fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
+  // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+  // zIndex: "9999",
 };
 
 export default defineContentScript({
@@ -20,13 +18,16 @@ export default defineContentScript({
 
   main() {
     (async () => {
-      await waitFor(".notion-frame .notion-scroller .layout-content");
+      await waitFor(".notion-frame .notion-scroller .layout-content"); // TODO: 重複
+      const container = await waitFor(
+        ".notion-topbar-action-buttons > :last-child"
+      );
 
       // カウンター要素を作成
       const counterDiv = document.createElement("div");
       counterDiv.id = "notion-character-counter";
       Object.assign(counterDiv.style, COUNTER_STYLES);
-      document.body.appendChild(counterDiv);
+      container.prepend(counterDiv);
 
       const updateCounter = throttle(() => {
         const counts = calculateNotionCharacterCounts();
@@ -34,7 +35,6 @@ export default defineContentScript({
       }, THROTTLE_TIME);
       updateCounter();
 
-      // MutationObserver を変数として保持
       let observer = new MutationObserver(updateCounter);
 
       // 監視を設定する関数
