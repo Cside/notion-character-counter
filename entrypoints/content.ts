@@ -1,18 +1,72 @@
+import { throttle } from "es-toolkit";
+
+const THROTTLE_TIME = 150;
+
+const COUNTER_STYLES = {
+  position: "fixed",
+  bottom: "20px",
+  right: "20px",
+  padding: "8px 12px",
+  backgroundColor: "rgba(255, 255, 255, 0.8)",
+  borderRadius: "6px",
+  fontSize: "14px",
+  fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
+  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+  zIndex: "9999",
+};
+
 export default defineContentScript({
-  matches: ['*://www.notion.so/*'],
+  matches: ["*://www.notion.so/*"],
+
   main() {
     (async () => {
-      
-    await waitFor('.notion-frame .notion-scroller .layout-content');
-    alert(JSON.stringify(calculateNotionCharacterCounts(), null, 2));
-    })()
+      await waitFor(".notion-frame .notion-scroller .layout-content");
+
+      // カウンター要素を作成
+      const counterDiv = document.createElement("div");
+      counterDiv.id = "notion-character-counter";
+      Object.assign(counterDiv.style, COUNTER_STYLES);
+      document.body.appendChild(counterDiv);
+
+      const updateCounter = () => {
+        const counts = calculateNotionCharacterCounts();
+        counterDiv.textContent = `文字数: ${counts.bodyWithoutSpaces}`;
+      };
+      updateCounter();
+
+      const observer = new MutationObserver(
+        throttle(updateCounter, THROTTLE_TIME)
+      );
+      observer.observe(
+        document.querySelector(".notion-frame .notion-scroller") as Node, // FIXME
+        {
+          childList: true,
+          subtree: true,
+          characterData: true,
+        }
+      );
+
+      chrome.runtime.onMessage.addListener(
+        async ({ type }: { type: string }) => {
+          console.log("received", type);
+          if (type === "CHANGE_PAGE") {
+            await waitFor(".notion-frame .notion-scroller .layout-content");
+            updateCounter();
+          }
+        }
+      );
+    })();
   },
 });
+
+// ==================================================
+// Utils
+// ==================================================
 
 const GET_ELEMENT_INTERVAL = 100;
 const TIMEOUT = 15 * 1_000;
 
-function waitFor  (selector: string): Promise<HTMLElement>  {
+function waitFor(selector: string): Promise<HTMLElement> {
   return new Promise((resolve) => {
     const getElement = (fn?: () => void) => {
       const $elem = document.querySelector<HTMLElement>(selector);
@@ -36,7 +90,7 @@ function waitFor  (selector: string): Promise<HTMLElement>  {
       });
     }, GET_ELEMENT_INTERVAL);
   });
-};
+}
 
 function calculateNotionCharacterCounts(): {
   bodyWithoutSpaces: number;
@@ -51,7 +105,9 @@ function calculateNotionCharacterCounts(): {
    * @param selector - DOM要素を選択するためのCSSセレクタ文字列。
    * @returns スペース無しとスペース有りの文字数を含むオブジェクト。
    */
-  const getTextCounts = (selector: string): { withoutSpaces: number; withSpaces: number } => {
+  const getTextCounts = (
+    selector: string
+  ): { withoutSpaces: number; withSpaces: number } => {
     // 指定されたセレクタに一致するすべての要素を取得
     const elements = document.querySelectorAll<HTMLElement>(selector);
     if (elements.length === 0) {
@@ -60,14 +116,14 @@ function calculateNotionCharacterCounts(): {
 
     // 全ての要素のテキストコンテンツを1つの文字列に結合
     const combinedText = Array.from(elements)
-      .map(el => el.textContent || '')
-      .join('');
+      .map((el) => el.textContent || "")
+      .join("");
 
     // スペース有りの文字数（元のコードに合わせて改行のみ除去）
-    const withSpaces = combinedText.replace(/\n/g, '').length;
+    const withSpaces = combinedText.replace(/\n/g, "").length;
 
     // スペース無しの文字数（半角・全角スペース、改行などをすべて除去）
-    const withoutSpaces = combinedText.replace(/[\s　]/g, '').length;
+    const withoutSpaces = combinedText.replace(/[\s　]/g, "").length;
 
     return { withoutSpaces, withSpaces };
   };
@@ -76,9 +132,15 @@ function calculateNotionCharacterCounts(): {
 
   // Notionページの各パーツの文字数を取得
   const allText = getTextCounts("main .notranslate");
-  const breadcrumb = getTextCounts("main .notion-breadcrumb-block .notranslate");
-  const breadcrumbFirst = getTextCounts("main .notion-collection_view-block .notion-record-icon + .notranslate");
-  const databaseTitle = getTextCounts("main .notion-collection_view-block .notranslate");
+  const breadcrumb = getTextCounts(
+    "main .notion-breadcrumb-block .notranslate"
+  );
+  const breadcrumbFirst = getTextCounts(
+    "main .notion-collection_view-block .notion-record-icon + .notranslate"
+  );
+  const databaseTitle = getTextCounts(
+    "main .notion-collection_view-block .notranslate"
+  );
   const codeBlock = getTextCounts("main .notion-code-block .notranslate");
   const inlineMath = getTextCounts("main .notion-text-equation-token");
 
