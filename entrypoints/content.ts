@@ -8,6 +8,7 @@ const COUNTER_STYLES = {
   // right: "20px",
   padding: "8px 12px",
   fontSize: "14px",
+  cursor: "pointer",
   // fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
   // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
   // zIndex: "9999",
@@ -28,10 +29,13 @@ export default defineContentScript({
       counterDiv.id = "notion-character-counter";
       Object.assign(counterDiv.style, COUNTER_STYLES);
       container.prepend(counterDiv);
+      counterDiv.addEventListener("click", async () => {
+        chrome.runtime.sendMessage({ type: "OPEN_OPTIONS_PAGE" });
+      });
 
       const updateCounter = throttle(() => {
         const counts = calculateNotionCharacterCounts();
-        counterDiv.textContent = `文字数: ${counts.bodyWithoutSpaces}`;
+        counterDiv.textContent = `文字数: ${counts.bodyWithoutSpaces.toLocaleString()}`;
       }, THROTTLE_TIME);
       updateCounter();
 

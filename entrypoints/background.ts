@@ -15,4 +15,8 @@ export default defineBackground(() => {
     },
     { url: [{ urlPrefix: NOTION_BASE_URL }] }
   );
+  chrome.runtime.onMessage.addListener(async (message) => {
+    if (message.type === "OPEN_OPTIONS_PAGE")
+      await chrome.runtime.openOptionsPage();
+  });
 });
