@@ -1,6 +1,6 @@
+import { DEFAULT_SETTINGS } from "@/src/defaults";
+import { Settings } from "@/src/types";
 import React, { FormEvent, useEffect, useState } from "react";
-import { DEFAULT_SETTINGS } from "../../src/defaults";
-import { Settings } from "../../src/types";
 
 function App() {
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
@@ -156,7 +156,7 @@ function App() {
               htmlFor="enabled"
               className="ml-2 block text-sm font-bold text-gray-900"
             >
-              Enabled
+              Enabled this extension
             </label>
           </div>
         </div>

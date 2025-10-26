@@ -1,6 +1,8 @@
+import { DEFAULT_SETTINGS } from "@/src/defaults";
+import { CountBy, Settings } from "@/src/types";
 import { throttle } from "es-toolkit";
-import { DEFAULT_SETTINGS } from "../src/defaults";
-import { Settings } from "../src/types";
+import { sum } from "es-toolkit/math";
+import { countCharacters, countWords } from "./utils";
 
 const THROTTLE_TIME = 150;
 
@@ -18,7 +20,6 @@ export default defineContentScript({
       const settings: Settings = await chrome.storage.local.get(
         DEFAULT_SETTINGS
       );
-
       if (!settings.enabled) return;
 
       await waitFor(".notion-frame .notion-scroller .layout-content"); // TODO: 重複
@@ -36,7 +37,7 @@ export default defineContentScript({
       });
 
       const updateCounter = throttle(() => {
-        const counts = calculateNotionCharacterCounts();
+        const counts = calculateNotionCharacterCounts(settings.countBy);
         let count: number;
         if (settings.includesCodeBlocks && settings.includesSpaces) {
           count = counts.bodyWithSpaces + counts.codeBlockWithSpaces;
@@ -113,7 +114,7 @@ function waitFor(selector: string): Promise<HTMLElement> {
   });
 }
 
-function calculateNotionCharacterCounts(): {
+function calculateNotionCharacterCounts(countBy: CountBy): {
   bodyWithoutSpaces: number;
   bodyWithSpaces: number;
   codeBlockWithoutSpaces: number;
@@ -136,17 +137,24 @@ function calculateNotionCharacterCounts(): {
     }
 
     // 全ての要素のテキストコンテンツを1つの文字列に結合
-    const combinedText = Array.from(elements)
-      .map((el) => el.textContent || "")
-      .join("");
+    const combinedTexts = [...elements].map((el) => el.textContent || "");
 
     // スペース有りの文字数（元のコードに合わせて改行のみ除去）
-    const withSpaces = combinedText.replace(/\n/g, "").length;
+    const withSpaces = combinedTexts.map((text) => text.replace(/\n/g, ""));
 
     // スペース無しの文字数（半角・全角スペース、改行などをすべて除去）
-    const withoutSpaces = combinedText.replace(/[\s　]/g, "").length;
+    const withoutSpaces = combinedTexts.map((text) => text.replace(/\s/g, ""));
 
-    return { withoutSpaces, withSpaces };
+    return {
+      withoutSpaces:
+        countBy === "words"
+          ? sum(withoutSpaces.map((text) => countWords(text)))
+          : sum(withoutSpaces.map((text) => countCharacters(text))),
+      withSpaces:
+        countBy === "words"
+          ? sum(withSpaces.map((text) => countWords(text)))
+          : sum(withSpaces.map((text) => countCharacters(text))),
+    };
   };
 
   // --- メインの計算ロジック ---
