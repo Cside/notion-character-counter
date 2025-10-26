@@ -4,7 +4,7 @@ import { defineConfig, WxtViteConfig } from "wxt";
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   manifest: {
-    permissions: ["webNavigation"],
+    permissions: ["storage", "unlimitedStorage", "webNavigation"],
   },
   vite: () =>
     ({

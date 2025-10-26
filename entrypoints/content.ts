@@ -3,15 +3,9 @@ import { throttle } from "es-toolkit";
 const THROTTLE_TIME = 150;
 
 const COUNTER_STYLES = {
-  // position: "fixed",
-  // bottom: "20px",
-  // right: "20px",
   padding: "8px 12px",
   fontSize: "14px",
   cursor: "pointer",
-  // fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
-  // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
-  // zIndex: "9999",
 };
 
 export default defineContentScript({
