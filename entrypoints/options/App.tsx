@@ -1,6 +1,7 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import {
   DEFAULT_COUNT_BY,
+  DEFAULT_ENABLED,
   DEFAULT_INCLUDES_CODE_BLOCKS,
   DEFAULT_INCLUDES_SPACES,
 } from "../../src/defaults";
@@ -14,13 +15,15 @@ type Settings = {
   enabled: boolean;
 };
 
+const DEFAULT_SETTINGS: Settings = {
+  countBy: DEFAULT_COUNT_BY,
+  includesSpaces: DEFAULT_INCLUDES_SPACES,
+  includesCodeBlocks: DEFAULT_INCLUDES_CODE_BLOCKS,
+  enabled: DEFAULT_ENABLED,
+};
+
 function App() {
-  const [settings, setSettings] = useState<Settings>({
-    countBy: "words",
-    includesSpaces: true,
-    includesCodeBlocks: false,
-    enabled: true,
-  });
+  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [status, setStatus] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -29,13 +32,7 @@ function App() {
     const restoreOptions = async () => {
       try {
         // 2. ストレージから設定を読み込む (Promiseベース)
-        const items = await chrome.storage.local.get({
-          countBy: DEFAULT_COUNT_BY,
-          includesSpaces: DEFAULT_INCLUDES_SPACES,
-          includesCodeBlocks: DEFAULT_INCLUDES_CODE_BLOCKS,
-          enabled: true,
-        });
-
+        const items = await chrome.storage.local.get(DEFAULT_SETTINGS);
         setSettings(items as Settings);
       } catch (error) {
         console.error("Failed to restore settings:", error);

@@ -1,5 +1,7 @@
 import { CountBy } from "./types";
 
+export const DEFAULT_ENABLED = true;
+
 export const DEFAULT_COUNT_BY: CountBy = (() => {
   const uiLanguage = chrome.i18n.getUILanguage();
   const shouldCountByCharacters = ["ja", "ko", "zh"].some((lang) =>
