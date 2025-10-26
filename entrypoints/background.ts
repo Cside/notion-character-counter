@@ -19,4 +19,8 @@ export default defineBackground(() => {
     if (message.type === "OPEN_OPTIONS_PAGE")
       await chrome.runtime.openOptionsPage();
   });
+
+  chrome.runtime.onInstalled.addListener(async (details) => {
+    if (details.reason === "install") await chrome.runtime.openOptionsPage();
+  });
 });
