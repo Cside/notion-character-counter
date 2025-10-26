@@ -1,4 +1,6 @@
 import { throttle } from "es-toolkit";
+import { DEFAULT_SETTINGS } from "../src/defaults";
+import { Settings } from "../src/types";
 
 const THROTTLE_TIME = 150;
 
@@ -13,6 +15,12 @@ export default defineContentScript({
 
   main() {
     (async () => {
+      const settings: Settings = await chrome.storage.local.get(
+        DEFAULT_SETTINGS
+      );
+
+      if (!settings.enabled) return;
+
       await waitFor(".notion-frame .notion-scroller .layout-content"); // TODO: 重複
       const container = await waitFor(
         ".notion-topbar-action-buttons > :last-child"
@@ -29,7 +37,17 @@ export default defineContentScript({
 
       const updateCounter = throttle(() => {
         const counts = calculateNotionCharacterCounts();
-        counterDiv.textContent = `文字数: ${counts.bodyWithoutSpaces.toLocaleString()}`;
+        let count: number;
+        if (settings.includesCodeBlocks && settings.includesSpaces) {
+          count = counts.bodyWithSpaces + counts.codeBlockWithSpaces;
+        } else if (settings.includesCodeBlocks && !settings.includesSpaces) {
+          count = counts.bodyWithoutSpaces + counts.codeBlockWithoutSpaces;
+        } else if (!settings.includesCodeBlocks && settings.includesSpaces) {
+          count = counts.bodyWithSpaces;
+        } else {
+          count = counts.bodyWithoutSpaces;
+        }
+        counterDiv.textContent = `文字数: ${count.toLocaleString()}`;
       }, THROTTLE_TIME);
       updateCounter();
 

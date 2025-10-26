@@ -1,26 +1,6 @@
 import React, { FormEvent, useEffect, useState } from "react";
-import {
-  DEFAULT_COUNT_BY,
-  DEFAULT_ENABLED,
-  DEFAULT_INCLUDES_CODE_BLOCKS,
-  DEFAULT_INCLUDES_SPACES,
-} from "../../src/defaults";
-import { CountBy } from "../../src/types";
-
-// 保存する設定値の型を定義
-type Settings = {
-  countBy: CountBy;
-  includesSpaces: boolean;
-  includesCodeBlocks: boolean;
-  enabled: boolean;
-};
-
-const DEFAULT_SETTINGS: Settings = {
-  countBy: DEFAULT_COUNT_BY,
-  includesSpaces: DEFAULT_INCLUDES_SPACES,
-  includesCodeBlocks: DEFAULT_INCLUDES_CODE_BLOCKS,
-  enabled: DEFAULT_ENABLED,
-};
+import { DEFAULT_SETTINGS } from "../../src/defaults";
+import { Settings } from "../../src/types";
 
 function App() {
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);

@@ -1,4 +1,4 @@
-import { CountBy } from "./types";
+import { CountBy, Settings } from "./types";
 
 export const DEFAULT_ENABLED = true;
 
@@ -13,3 +13,10 @@ export const DEFAULT_COUNT_BY: CountBy = (() => {
 export const DEFAULT_INCLUDES_SPACES = true;
 
 export const DEFAULT_INCLUDES_CODE_BLOCKS = true;
+
+export const DEFAULT_SETTINGS: Settings = {
+  countBy: DEFAULT_COUNT_BY,
+  includesSpaces: DEFAULT_INCLUDES_SPACES,
+  includesCodeBlocks: DEFAULT_INCLUDES_CODE_BLOCKS,
+  enabled: DEFAULT_ENABLED,
+};
