@@ -21,6 +21,10 @@ export default defineBackground(() => {
   });
 
   chrome.runtime.onInstalled.addListener(async (details) => {
-    if (details.reason === "install") await chrome.runtime.openOptionsPage();
+    if (details.reason === "install")
+      await chrome.tabs.create({
+        url: chrome.runtime.getURL("options.html?on_installed"),
+        active: true,
+      });
   });
 });

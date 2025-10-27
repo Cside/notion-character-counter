@@ -7,6 +7,10 @@ function App() {
   const [status, setStatus] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const isOnInstalled = new URLSearchParams(window.location.search).has(
+    "on_installed"
+  );
+
   // コンポーネントのマウント時に設定を読み込む (async/await形式に修正)
   useEffect(() => {
     const restoreOptions = async () => {
@@ -144,24 +148,26 @@ function App() {
         </div>
 
         {/* Enabled Section */}
-        <div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="enabled"
-              name="enabled"
-              checked={settings.enabled}
-              onChange={handleChange}
-              className="h-4 w-4 rounded accent-green-600"
-            />
-            <label
-              htmlFor="enabled"
-              className="ml-2 block text-sm font-bold text-gray-900"
-            >
-              Enabled this extension
-            </label>
+        {isOnInstalled || (
+          <div>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="enabled"
+                name="enabled"
+                checked={settings.enabled}
+                onChange={handleChange}
+                className="h-4 w-4 rounded accent-green-600"
+              />
+              <label
+                htmlFor="enabled"
+                className="ml-2 block text-sm font-bold text-gray-900"
+              >
+                Enabled this extension
+              </label>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Actions Section */}
         <div className="text-center pt-3">
