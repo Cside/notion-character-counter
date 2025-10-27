@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS } from "@/src/defaults";
+import { DEFAULT_SETTINGS } from "@/src/constants";
 import { Settings } from "@/src/types";
 import React, { FormEvent, useEffect, useState } from "react";
 

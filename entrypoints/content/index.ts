@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS } from "@/src/defaults";
+import { DEFAULT_SETTINGS } from "@/src/constants";
 import { CountBy, Settings } from "@/src/types";
 import { throttle } from "es-toolkit";
 import { sum } from "es-toolkit/math";
