@@ -106,22 +106,24 @@ function App() {
             Include:
           </label>
           <div className="space-y-2">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="includesSpaces"
-                name="includesSpaces"
-                checked={settings.includesSpaces}
-                onChange={handleChange}
-                className="h-4 w-4 rounded accent-green-600"
-              />
-              <label
-                htmlFor="includesSpaces"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                spaces
-              </label>
-            </div>
+            {settings.countBy === "characters" && (
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="includesSpaces"
+                  name="includesSpaces"
+                  checked={settings.includesSpaces}
+                  onChange={handleChange}
+                  className="h-4 w-4 rounded accent-green-600"
+                />
+                <label
+                  htmlFor="includesSpaces"
+                  className="ml-2 block text-sm text-gray-900"
+                >
+                  spaces
+                </label>
+              </div>
+            )}
             <div className="flex items-center">
               <input
                 type="checkbox"
