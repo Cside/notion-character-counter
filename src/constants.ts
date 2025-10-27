@@ -2,10 +2,11 @@ import { CountBy, Settings } from "./types";
 
 export const DEFAULT_ENABLED = true;
 
+export const LANG = chrome.i18n.getUILanguage().replace(/-.+$/, "");
+
 export const DEFAULT_COUNT_BY: CountBy = (() => {
-  const uiLanguage = chrome.i18n.getUILanguage();
-  const shouldCountByCharacters = ["ja", "ko", "zh"].some((lang) =>
-    uiLanguage.startsWith(lang)
+  const shouldCountByCharacters = ["ja", "ko", "zh"].some(
+    (lang) => LANG === lang
   );
   return shouldCountByCharacters ? "characters" : "words";
 })();

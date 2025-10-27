@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS } from "@/src/constants";
+import { DEFAULT_SETTINGS, LANG } from "@/src/constants";
 import { CountBy, Settings } from "@/src/types";
 import { throttle } from "es-toolkit";
 import { sum } from "es-toolkit/math";
@@ -56,8 +56,15 @@ export default defineContentScript({
             : counts.codeBlockWithoutSpaces;
         }
 
-        const label = settings.countBy === "words" ? "単語数" : "文字数";
-        counterDiv.textContent = `${label}: ${count.toLocaleString()}`;
+        if (LANG === "ja") {
+          counterDiv.textContent = `${count.toLocaleString()} ${
+            settings.countBy === "words" ? "語" : "字"
+          }`;
+        } else {
+          counterDiv.textContent = `${count.toLocaleString()} ${
+            settings.countBy === "words" ? "words" : "chars"
+          }`;
+        }
       }, THROTTLE_TIME);
       updateCounter();
 
