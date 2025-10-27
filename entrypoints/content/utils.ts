@@ -1,5 +1,8 @@
 export const countWords = (text: string): number => {
-  return text.split(/\s+/).filter((word) => word.length > 0).length;
+  const words = text.match(
+    /[\p{L}\p{N}\p{M}\p{Emoji_Presentation}\p{Extended_Pictographic}.@&]+/gu
+  );
+  return words ? words.length : 0;
 };
 
 const segmenter = new Intl.Segmenter(
