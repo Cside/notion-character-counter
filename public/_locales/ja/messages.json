@@ -4,5 +4,8 @@
   },
   "extensionDescription": {
     "message": "Notionのページの文字数をリアルタイムに表示"
+  },
+  "buyMeACoffee": {
+    "message": "もしこの拡張機能が気に入ったら、コーヒーを一杯奢ってください。"
   }
 }

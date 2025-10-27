@@ -4,5 +4,8 @@
   },
   "extensionDescription": {
     "message": "Show the total character count on Notion pages"
+  },
+  "buyMeACoffee": {
+    "message": "如果您喜欢这款扩展程序，欢迎请我喝杯咖啡。"
   }
 }

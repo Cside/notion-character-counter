@@ -8,7 +8,7 @@ export default defineConfig({
       plugins: [tailwindcss()],
     } as WxtViteConfig),
   manifest: {
-    permissions: ["storage", "unlimitedStorage", "webNavigation"],
+    permissions: ["tabs", "storage", "unlimitedStorage", "webNavigation"],
     name: "__MSG_extensionName__",
     description: "__MSG_extensionDescription__",
     default_locale: "en"
