@@ -38,17 +38,26 @@ export default defineContentScript({
 
       const updateCounter = throttle(() => {
         const counts = calculateNotionCharacterCounts(settings.countBy);
-        let count: number;
-        if (settings.includesCodeBlocks && settings.includesSpaces) {
-          count = counts.bodyWithSpaces + counts.codeBlockWithSpaces;
-        } else if (settings.includesCodeBlocks && !settings.includesSpaces) {
-          count = counts.bodyWithoutSpaces + counts.codeBlockWithoutSpaces;
-        } else if (!settings.includesCodeBlocks && settings.includesSpaces) {
-          count = counts.bodyWithSpaces;
-        } else {
-          count = counts.bodyWithoutSpaces;
+
+        // countByが'words'の場合は、includesSpacesを強制的にtrueとして扱う
+        // 単語数はスペース区切りで数えるため、スペースを含めないオプションは無意味なため
+        const useWithSpaces =
+          settings.countBy === "words" || settings.includesSpaces;
+
+        // 本文のカウントを決定
+        let count = useWithSpaces
+          ? counts.bodyWithSpaces
+          : counts.bodyWithoutSpaces;
+
+        // コードブロックを含める場合は加算
+        if (settings.includesCodeBlocks) {
+          count += useWithSpaces
+            ? counts.codeBlockWithSpaces
+            : counts.codeBlockWithoutSpaces;
         }
-        counterDiv.textContent = `文字数: ${count.toLocaleString()}`;
+
+        const label = settings.countBy === "words" ? "単語数" : "文字数";
+        counterDiv.textContent = `${label}: ${count.toLocaleString()}`;
       }, THROTTLE_TIME);
       updateCounter();
 
