@@ -1,0 +1,8 @@
+{
+  "extensionName": {
+    "message": "Notionリアルタイム文字数カウント"
+  },
+  "extensionDescription": {
+    "message": "Notionのページの文字数をリアルタイムに表示"
+  }
+}

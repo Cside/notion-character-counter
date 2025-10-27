@@ -1,0 +1,8 @@
+{
+  "extensionName": {
+    "message": "Notion Word Counter"
+  },
+  "extensionDescription": {
+    "message": "Show the total word count on Notion pages"
+  }
+}

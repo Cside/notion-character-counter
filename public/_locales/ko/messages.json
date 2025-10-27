@@ -1,0 +1,8 @@
+{
+  "extensionName": {
+    "message": "Notion Character Counter"
+  },
+  "extensionDescription": {
+    "message": "Show the total character count on Notion pages"
+  }
+}

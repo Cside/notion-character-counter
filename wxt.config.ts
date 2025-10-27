@@ -3,11 +3,14 @@ import { defineConfig, WxtViteConfig } from "wxt";
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-  manifest: {
-    permissions: ["storage", "unlimitedStorage", "webNavigation"],
-  },
   vite: () =>
     ({
       plugins: [tailwindcss()],
     } as WxtViteConfig),
+  manifest: {
+    permissions: ["storage", "unlimitedStorage", "webNavigation"],
+    name: "__MSG_extensionName__",
+    description: "__MSG_extensionDescription__",
+    default_locale: "en"
+  },
 });
