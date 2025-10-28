@@ -10,6 +10,7 @@ function App() {
   const isOnInstalled = new URLSearchParams(window.location.search).has(
     "on_installed"
   );
+  const title = chrome.i18n.getMessage("extensionName");
 
   // コンポーネントのマウント時に設定を読み込む (async/await形式に修正)
   useEffect(() => {
@@ -24,8 +25,9 @@ function App() {
         setIsLoading(false); // 読み込み完了
       }
     };
-
     restoreOptions();
+
+    document.title = title;
   }, []);
 
   // フォームの値を汎用的に更新するハンドラ
@@ -57,7 +59,7 @@ function App() {
   return (
     <div className="w-80 p-6 bg-gray-50 text-gray-800 font-sans">
       <h1 className="text-2xl font-bold text-center text-gray-900 mb-6">
-        Notion Words Counter
+        {title}
       </h1>
 
       <form onSubmit={handleSave} noValidate className="space-y-5">
