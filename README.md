@@ -1,2 +1,2 @@
-# Notion Character Counter
+# Notion Word Counter
 
