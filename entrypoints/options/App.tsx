@@ -63,6 +63,28 @@ function App() {
       </h1>
 
       <form onSubmit={handleSave} noValidate className="space-y-5">
+        {/* Enabled Section */}
+        {isOnInstalled || (
+          <div>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="enabled"
+                name="enabled"
+                checked={settings.enabled}
+                onChange={handleChange}
+                className="h-4 w-4 rounded accent-green-600"
+              />
+              <label
+                htmlFor="enabled"
+                className="ml-2 block text-sm font-bold text-gray-900"
+              >
+                Enabled this extension
+              </label>
+            </div>
+          </div>
+        )}
+
         {/* Count by Section */}
         <div>
           <label className="block text-base font-bold mb-2 text-gray-700">
@@ -148,28 +170,6 @@ function App() {
             </div>
           </div>
         </div>
-
-        {/* Enabled Section */}
-        {isOnInstalled || (
-          <div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="enabled"
-                name="enabled"
-                checked={settings.enabled}
-                onChange={handleChange}
-                className="h-4 w-4 rounded accent-green-600"
-              />
-              <label
-                htmlFor="enabled"
-                className="ml-2 block text-sm font-bold text-gray-900"
-              >
-                Enabled this extension
-              </label>
-            </div>
-          </div>
-        )}
 
         {/* Actions Section */}
         <div className="text-center pt-3">
