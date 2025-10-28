@@ -44,8 +44,8 @@ function App() {
     e.preventDefault();
     try {
       await chrome.storage.local.set(settings);
-      setStatus("Saved!");
-      setTimeout(() => setStatus(""), 1500);
+      setStatus("Saved! Please close this window and reload Notion.");
+      setTimeout(() => setStatus(""), 4_000);
     } catch (error) {
       console.error("Failed to save settings:", error);
       setStatus("Error!");
