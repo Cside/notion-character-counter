@@ -182,6 +182,21 @@ function App() {
           </p>
         </div>
       </form>
+      <hr className="border-gray-300 mb-4" />
+      <div className="text-center pt-3">
+        <a
+          href="https://ko-fi.com/P5P6OT5NE"
+          className="inline-block"
+          target="_blank"
+        >
+          <img
+            height="36"
+            style={{ border: "0px", height: "36px" }}
+            src="https://storage.ko-fi.com/cdn/kofi5.png?v=6"
+            alt="Buy Me a Coffee at ko-fi.com"
+          />
+        </a>
+      </div>
     </div>
   );
 }
