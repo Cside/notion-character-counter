@@ -3,6 +3,6 @@
     "message": "Notion Word Counter"
   },
   "extensionDescription": {
-    "message": "Show the total word count on Notion pages"
+    "message": "Show the total word count in Notion pages"
   }
 }

@@ -3,6 +3,6 @@
     "message": "Notion Character Counter"
   },
   "extensionDescription": {
-    "message": "Show the total character count on Notion pages"
+    "message": "Show the total character count in Notion pages"
   }
 }
