@@ -13,7 +13,7 @@ const COUNTER_STYLES = {
 };
 
 export default defineContentScript({
-  matches: ["*://www.notion.so/*"],
+  matches: ["*://www.notion.so/*", "*://app.notion.com/*"],
 
   main() {
     (async () => {
