@@ -1,4 +1,4 @@
-const NOTION_BASE_URL = "https://www.notion.so/";
+const NOTION_BASE_URLS = ["https://www.notion.so/", "https://app.notion.com/"];
 
 export default defineBackground(() => {
   chrome.webNavigation.onHistoryStateUpdated.addListener(
@@ -13,7 +13,7 @@ export default defineBackground(() => {
         if (!(error + "").match(/Could not establish connection/)) throw error;
       }
     },
-    { url: [{ urlPrefix: NOTION_BASE_URL }] }
+    { url: [NOTION_BASE_URLS.map((baseUrl) => ({ urlPrefix: baseUrl }))] },
   );
   chrome.runtime.onMessage.addListener(async (message) => {
     if (message.type === "OPEN_OPTIONS_PAGE")
